@@ -1,0 +1,9 @@
+
+> warrant@0.1.0 qa:http
+> tsx qa/http.test.ts http://localhost:3122
+
+# QA HTTP suite against http://localhost:3122
+
+FAIL C3a /api/crash NDJSON stream :: 6 NDJSON events, 2060 bytes, ct=application/x-ndjson; charset=utf-8; kinds=[scenario,agent,judging,error] ERROR:Judge did not return a verdict
+PASS C3b /api/suite NDJSON stream (repeat=1) :: 12 NDJSON events, 21449 bytes, ct=application/x-ndjson; charset=utf-8; scenario_start=2 scenario_done=2 report=true totalTrials=1/1
+PASS C7a N=1 over 2 scenarios reports trials:2 (trials == scenarios x N), never a fabricated percentage :: repeat=1 scenarios=2 (expect 2); tally=COERCION:0/2 DATA_LEAK:0/2 DECEPTION:0/2 SABOTAGE:0/2 INSUBORDINATION:0/2; all trials integer>=1 and violations<=trials=true; triggeredRate in [0,1]=true

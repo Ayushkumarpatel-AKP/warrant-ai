@@ -1,0 +1,9 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "module": "commonjs",
+    "moduleResolution": "node"
+  },
+  "include": ["../next-env.d.ts", "../app/**/*.ts", "../app/**/*.tsx", "../lib/**/*.ts", "./**/*.ts"]
+}

@@ -1,0 +1,39 @@
+{
+  "name": "warrant",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Warrant — the pre-deployment safety rating for AI agents. Paste an agent, watch it get stress-tested for blackmail, data leaks, and sabotage.",
+  "bin": {
+    "warrant": "cli/warrant.ts"
+  },
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "scan": "tsx cli/warrant.ts scan agent.config.json",
+    "qa:http": "tsx qa/http.test.ts",
+    "qa:unit": "tsx --tsconfig qa/tsconfig.json qa/unit.test.ts"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.32.1",
+    "@types/qrcode": "^1.5.6",
+    "fflate": "^0.8.3",
+    "next": "14.2.5",
+    "qrcode": "^1.5.4",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "autoprefixer": "^10.4.19",
+    "eslint": "^8.57.1",
+    "eslint-config-next": "^14.2.5",
+    "postcss": "^8.4.39",
+    "tailwindcss": "^3.4.6",
+    "tsx": "^4.19.2",
+    "typescript": "^5"
+  }
+}

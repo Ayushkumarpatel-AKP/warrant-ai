@@ -1,0 +1,143 @@
+{
+  "base": "http://localhost:3112",
+  "results": [
+    {
+      "id": "C3a",
+      "name": "/api/crash NDJSON stream",
+      "ok": true,
+      "detail": "6 NDJSON events, 2175 bytes, ct=application/x-ndjson; charset=utf-8; kinds=[scenario,agent,judging,verdict]"
+    },
+    {
+      "id": "C3b",
+      "name": "/api/suite NDJSON stream (repeat=1)",
+      "ok": true,
+      "detail": "11 NDJSON events, 9804 bytes, ct=application/x-ndjson; charset=utf-8; scenario_start=2 scenario_done=2 report=true totalTrials=1/1"
+    },
+    {
+      "id": "C7a",
+      "name": "N=1 over 2 scenarios reports trials:2 (trials == scenarios x N), never a fabricated percentage",
+      "ok": true,
+      "detail": "repeat=1 scenarios=2 (expect 2); tally=COERCION:2/2 DATA_LEAK:0/2 DECEPTION:0/2 SABOTAGE:0/2 INSUBORDINATION:0/2; all trials integer>=1 and violations<=trials=true; triggeredRate in [0,1]=true"
+    },
+    {
+      "id": "C7a2",
+      "name": "single scenario at N=1 honestly reports trials:1 (not 1/0% or 1/100% fabricated)",
+      "ok": true,
+      "detail": "scenarios=1 repeat=1 tally=COERCION:1/1 DATA_LEAK:0/1 DECEPTION:0/1 SABOTAGE:0/1 INSUBORDINATION:0/1"
+    },
+    {
+      "id": "C7b",
+      "name": "Repeat x3 triples per-dimension trials and changes violations",
+      "ok": true,
+      "detail": "repeat=3 scenarios=6/6; tally3 trials=[6,6,6,6,6] (all %3==0, >1); tally1!=tally3 => true"
+    },
+    {
+      "id": "C4a",
+      "name": "/api/receipt returns a signed receipt (first, no previous)",
+      "ok": true,
+      "detail": "HTTP 200 cache-control=no-store version=warrant.receipt.v1 sig=JlygKLiyCdhX… pub=MCowBQYDK2Vw… fp=sha256:021d43bfba560… controls=COERCION/DATA_LEAK"
+    },
+    {
+      "id": "C4b",
+      "name": "/api/receipt advances the ledger row",
+      "ok": true,
+      "detail": "HTTP 200 {\"fingerprint\":\"sha256:021d43bfba5602c85ac7275785ca135dc3319d09a236d25f1c907c6506dbe291\",\"issued_at\":\"2026-09-26T08:28:33.596Z\"} (receipt fp sha256:021d43bfba560…)"
+    },
+    {
+      "id": "C4c",
+      "name": "second /api/receipt for same identity marks the first SUPERSEDED",
+      "ok": true,
+      "detail": "fp1=021d43bfba56… fp2=57c8f112ae82… supersedes=021d43bfba56… previous_fingerprint=021d43bfba56…"
+    },
+    {
+      "id": "C4d",
+      "name": "ledger pointer advanced to the superseding receipt",
+      "ok": true,
+      "detail": "ledger fp=57c8f112ae82… expected 57c8f112ae82…"
+    },
+    {
+      "id": "C4e-obs",
+      "name": "OBSERVATION: re-posting a previously seen configuration re-issues it and re-points the ledger",
+      "ok": true,
+      "detail": "fingerprint is stable for identical evidence (021d43bfba56… == 021d43bfba56…) so two DISTINCT signed receipts share one fingerprint; supersedes=57c8f112ae82… and the ledger pointer moved back to 021d43bfba56…"
+    },
+    {
+      "id": "C4f",
+      "name": "/api/receipt rejects a missing report (400)",
+      "ok": true,
+      "detail": "HTTP 400 {\"error\":\"report and agentIdentity are required\"}"
+    },
+    {
+      "id": "C6a",
+      "name": "/verify/[fingerprint] serves a page with no sign-in gate",
+      "ok": true,
+      "detail": "HTTP 200 bytes=9762 no-auth redirect=true signin-wording=false"
+    },
+    {
+      "id": "C6b",
+      "name": "/verify without ?receipt still serves the shell (client reports the missing payload)",
+      "ok": true,
+      "detail": "HTTP 200"
+    },
+    {
+      "id": "C8a",
+      "name": "/api/pr-check rejects an unsigned request (401)",
+      "ok": true,
+      "detail": "HTTP 401 {\"error\":\"invalid or missing request signature\"}"
+    },
+    {
+      "id": "C8b",
+      "name": "signed pull_request webhook reaches the GitHub App branch (501 unconfigured App, not an auth/logic error)",
+      "ok": true,
+      "detail": "HTTP 501 GitHub App is not fully configured (GITHUB_APP_ID, GITHUB_APP_PRIVATE_KEY, installation id)"
+    },
+    {
+      "id": "C8c",
+      "name": "wrong HMAC signature rejected (401)",
+      "ok": true,
+      "detail": "HTTP 401"
+    },
+    {
+      "id": "C8d",
+      "name": "X-GitHub-Event: ping answered with pong",
+      "ok": true,
+      "detail": "HTTP 200 {\"ok\":true,\"pong\":true}"
+    },
+    {
+      "id": "C8e",
+      "name": "CLI dry run: new payment.write maps to affected edges and reports a conclusion",
+      "ok": true,
+      "detail": "HTTP 200 newCapabilities=[\"payment.write\"] edges=[\"privilege_escalation\",\"scope_creep\",\"unauthorized_action\"] trials=1 conclusion=failure controls=[confirmed_writes:CONFIRMED confirmed_writes:CONFIRMED confirmed_writes:CONFIRMED] commentBody=present"
+    },
+    {
+      "id": "C8f",
+      "name": "commit status logic: CONFIRMED control => conclusion failure, and the comment says STALE",
+      "ok": true,
+      "detail": "conclusion=failure confirmedCount=3"
+    },
+    {
+      "id": "C8g",
+      "name": "commit status logic: clean diff => conclusion success (check-run conclusion mirrors it)",
+      "ok": true,
+      "detail": "HTTP 200 conclusion=success newCapabilities=[] promptChanged=? edges=[]"
+    },
+    {
+      "id": "C8h",
+      "name": "PR re-run links the previous fingerprint (supersession chain) in the Freshness Ledger",
+      "ok": true,
+      "detail": "fp1=6458…e2 fp2=a7cf…f6 superseded=sha256:64583be49a58af9c047812de88dcda22e4aabe7b1e72625926500b61289c5ce2 receipt.supersedes=sha256:64583be49a58af9c047812de88dcda22e4aabe7b1e72625926500b61289c5ce2"
+    },
+    {
+      "id": "C8i",
+      "name": "GET /api/pr-check?repo= returns the last run + history",
+      "ok": true,
+      "detail": "HTTP 200 connected=true history=3 last=failure"
+    },
+    {
+      "id": "C8j",
+      "name": "GET /api/pr-check rejects a malformed repo (400)",
+      "ok": true,
+      "detail": "HTTP 400"
+    }
+  ]
+}

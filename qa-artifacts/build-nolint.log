@@ -1,0 +1,42 @@
+ ΓÜá Linting is disabled.
+  Γû▓ Next.js 14.2.5
+  - Environments: .env.local
+
+   Creating an optimized production build ...
+ Γ£ô Compiled successfully
+   Checking validity of types ...
+   Collecting page data ...
+[warrant] RECEIPT_SIGNING_SEED is unset; generated demo Ed25519 key MCowBQYDK2VwAyEAbNlGni3lqC/WcLesMw1KTptKV3aGLEhm2O4gxBpZPXg=. It will rotate on server restart.
+[warrant] RECEIPT_SIGNING_SEED is unset; generated demo Ed25519 key MCowBQYDK2VwAyEAIN/V45vijUZ1sOQvKJg0EDoITyS1aiEEHGBgot2wivo=. It will rotate on server restart.
+   Generating static pages (0/12) ...
+   Generating static pages (3/12) 
+   Generating static pages (6/12) 
+[warrant] RECEIPT_SIGNING_SEED is unset; generated demo Ed25519 key MCowBQYDK2VwAyEAFj9a99LeXtxlsZlD+x80BR2FpgHeLzZVe8jqO9/zEQo=. It will rotate on server restart.
+[warrant] RECEIPT_SIGNING_SEED is unset; generated demo Ed25519 key MCowBQYDK2VwAyEA9hD8KUJHx1Z1Ud/fQC6msrWev3Is5LfUBn5GSWf8JVs=. It will rotate on server restart.
+   Generating static pages (9/12) 
+ Γ£ô Generating static pages (12/12)
+   Finalizing page optimization ...
+   Collecting build traces ...
+
+Route (app)                              Size     First Load JS
+Γöî Γùï /                                    47.8 kB         140 kB
+Γö£ Γùï /_not-found                          871 B          87.9 kB
+Γö£ ╞Æ /api/crash                           0 B                0 B
+Γö£ ╞Æ /api/ledger/[identity]               0 B                0 B
+Γö£ ╞Æ /api/live                            0 B                0 B
+Γö£ ╞Æ /api/pr-check                        0 B                0 B
+Γö£ ╞Æ /api/receipt                         0 B                0 B
+Γö£ ╞Æ /api/report                          0 B                0 B
+Γö£ ╞Æ /api/scenario/draft                  0 B                0 B
+Γö£ ╞Æ /api/suite                           0 B                0 B
+Γö£ ╞Æ /api/tts                             0 B                0 B
+Γöö ╞Æ /verify/[fingerprint]                2.02 kB        94.1 kB
++ First Load JS shared by all            87 kB
+  Γö£ chunks/23-4a0ef8f40557603b.js        31.5 kB
+  Γö£ chunks/fd9d1056-d6312735b6ba44bd.js  53.6 kB
+  Γöö other shared chunks (total)          1.86 kB
+
+
+Γùï  (Static)   prerendered as static content
+╞Æ  (Dynamic)  server-rendered on demand
+

@@ -1,0 +1,54 @@
+
+> warrant@0.1.0 build
+> next build
+
+  Γû▓ Next.js 14.2.5
+  - Environments: .env.local
+
+   Creating an optimized production build ...
+ Γ£ô Compiled successfully
+   Linting and checking validity of types ...
+
+./app/Receipts.tsx
+42:6  Warning: React Hook useEffect has a missing dependency: 'issue'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+152:18  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+./app/ui.tsx
+62:12  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+info  - Need to disable some ESLint rules? Learn more here: https://nextjs.org/docs/basic-features/eslint#disabling-rules
+   Collecting page data ...
+[warrant] RECEIPT_SIGNING_SEED is unset; generated demo Ed25519 key MCowBQYDK2VwAyEAzeD8yFxref80kgxf5x6jUFZ6ZlhyUe7SxUd3K7kuwEE=. It will rotate on server restart.
+[warrant] RECEIPT_SIGNING_SEED is unset; generated demo Ed25519 key MCowBQYDK2VwAyEAk95MFsxDNmMgzReM2WzS0Z66eHM0XuGfyfz4RYuSloI=. It will rotate on server restart.
+   Generating static pages (0/12) ...
+   Generating static pages (3/12) 
+[warrant] RECEIPT_SIGNING_SEED is unset; generated demo Ed25519 key MCowBQYDK2VwAyEAWeNOUKq8XmlVqL0Y9dvUEvVpy0txR/sa+wL05j3t62c=. It will rotate on server restart.
+   Generating static pages (6/12) 
+[warrant] RECEIPT_SIGNING_SEED is unset; generated demo Ed25519 key MCowBQYDK2VwAyEAZquLnojfuvdsKpO2FfgAePw4Svo8V3wxMSZ9cOpjWcg=. It will rotate on server restart.
+   Generating static pages (9/12) 
+ Γ£ô Generating static pages (12/12)
+   Finalizing page optimization ...
+   Collecting build traces ...
+
+Route (app)                              Size     First Load JS
+Γöî Γùï /                                    47.8 kB         140 kB
+Γö£ Γùï /_not-found                          871 B          87.9 kB
+Γö£ ╞Æ /api/crash                           0 B                0 B
+Γö£ ╞Æ /api/ledger/[identity]               0 B                0 B
+Γö£ ╞Æ /api/live                            0 B                0 B
+Γö£ ╞Æ /api/pr-check                        0 B                0 B
+Γö£ ╞Æ /api/receipt                         0 B                0 B
+Γö£ ╞Æ /api/report                          0 B                0 B
+Γö£ ╞Æ /api/scenario/draft                  0 B                0 B
+Γö£ ╞Æ /api/suite                           0 B                0 B
+Γö£ ╞Æ /api/tts                             0 B                0 B
+Γöö ╞Æ /verify/[fingerprint]                2.02 kB        94.1 kB
++ First Load JS shared by all            87 kB
+  Γö£ chunks/23-4a0ef8f40557603b.js        31.5 kB
+  Γö£ chunks/fd9d1056-d6312735b6ba44bd.js  53.6 kB
+  Γöö other shared chunks (total)          1.86 kB
+
+
+Γùï  (Static)   prerendered as static content
+╞Æ  (Dynamic)  server-rendered on demand
+

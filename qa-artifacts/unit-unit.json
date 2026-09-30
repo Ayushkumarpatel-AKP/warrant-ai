@@ -1,0 +1,281 @@
+{
+  "base": "http://localhost:3121",
+  "results": [
+    {
+      "id": "C1",
+      "name": "left rail has exactly 9 nav items in the spec order, Receipts 6th (after Full report)",
+      "ok": true,
+      "detail": "found 9: [Overview | Threat model | New crash test | Voice red-team | Full report | Receipts | Scenarios | Connect agent | Settings]"
+    },
+    {
+      "id": "C1b",
+      "name": "every nav item is a button wired to a tab id (9 distinct keys)",
+      "ok": true,
+      "detail": "rail-item buttons=9"
+    },
+    {
+      "id": "C2a",
+      "name": "metric tile 'Receipts issued' renders with count and the non-warn sub-label",
+      "ok": true,
+      "detail": "label present=true; empty-ledger value=\"–\"=true; sub=\"signed this session\"=true"
+    },
+    {
+      "id": "C2b",
+      "name": "the other four metric tiles are unregressed",
+      "ok": true,
+      "detail": "found Agents tested=true Failed safety=true Avg rating=true Traps available=true"
+    },
+    {
+      "id": "C2c",
+      "name": "'⚠ N superseded' logic: 0 when empty, 1 for one stale twin, unchanged for a second identity",
+      "ok": true,
+      "detail": "predicate present in app/Dashboard.tsx=true; empty=0 oneStale=1 twoIdentities=1"
+    },
+    {
+      "id": "C2d",
+      "name": "tile value is ledger.length (0 receipts renders as the en-dash placeholder)",
+      "ok": true,
+      "detail": "app/Dashboard.tsx:202-206 uses value={ledger.length || \"–\"}"
+    },
+    {
+      "id": "C10-overview",
+      "name": "Overview (Dashboard default render) renders without throwing",
+      "ok": true,
+      "detail": "SSR produced 5988 bytes"
+    },
+    {
+      "id": "C10-threats",
+      "name": "Threat model renders without throwing",
+      "ok": true,
+      "detail": "SSR produced 12708 bytes"
+    },
+    {
+      "id": "C10-receipts",
+      "name": "Receipts (empty state) renders without throwing",
+      "ok": true,
+      "detail": "SSR produced 262 bytes"
+    },
+    {
+      "id": "C10-scenarios",
+      "name": "Scenarios renders without throwing",
+      "ok": true,
+      "detail": "SSR produced 878 bytes"
+    },
+    {
+      "id": "C10-connect",
+      "name": "Connect agent renders without throwing",
+      "ok": true,
+      "detail": "SSR produced 2432 bytes"
+    },
+    {
+      "id": "C10-run",
+      "name": "New crash test (CrashRunner) renders without throwing",
+      "ok": true,
+      "detail": "SSR produced 3224 bytes"
+    },
+    {
+      "id": "C10-report",
+      "name": "Full report (SuiteReport) renders without throwing",
+      "ok": true,
+      "detail": "SSR produced 5286 bytes"
+    },
+    {
+      "id": "C10-voice",
+      "name": "Voice red-team (VoiceCall) renders without throwing",
+      "ok": true,
+      "detail": "SSR produced 1147 bytes"
+    },
+    {
+      "id": "C10-live",
+      "name": "Voice red-team live (LiveCall) renders without throwing",
+      "ok": true,
+      "detail": "SSR produced 3570 bytes"
+    },
+    {
+      "id": "C10-settings",
+      "name": "Settings renders without throwing",
+      "ok": true,
+      "detail": "SSR produced 2432 bytes"
+    },
+    {
+      "id": "C10-receipts2",
+      "name": "Receipts renders a CURRENT pill and a SUPERSEDED pill for the stale twin",
+      "ok": true,
+      "detail": "CURRENT=true SUPERSEDED-by=true bytes=3378"
+    },
+    {
+      "id": "C4g",
+      "name": "client-side Ed25519 verifyReceiptSignature() returns TRUE for a real signed receipt",
+      "ok": true,
+      "detail": "returned true; key_note=demo key, not KMS; public_key=MCowBQYDK2VwAyEA… is 44 bytes (SPKI DER, published by lib/receipt.ts:70/84). lib/receiptShared.ts:76-85 picks the import format from the key length (44B => \"spki\" first, 32B => \"raw\" first) and loops candidates, so both encodings verify."
+    },
+    {
+      "id": "C4g-diag",
+      "name": "DIAGNOSIS: the signature is valid; the only encodings that work are the SPKI DER the producer publishes and its raw 32-byte tail",
+      "ok": true,
+      "detail": "importKey(\"raw\", spkiDer[44B]) => threw DataError: Ed25519 raw keys must be exactly 32-bytes; importKey(\"raw\", spkiDer.subarray(-32)) => verify=true. So the Ed25519 signature in lib/receipt.ts:86 is correct, and a \"raw\"-only verifier would be wrong for the 44-byte key Warrant actually publishes — which is why receiptShared.ts now tries \"spki\" first for a non-32-byte key."
+    },
+    {
+      "id": "C4h",
+      "name": "tampering with a signed field makes verification return FALSE",
+      "ok": true,
+      "detail": "verify(tampered)=false"
+    },
+    {
+      "id": "C4i",
+      "name": "tampering with the control tally (violations 1 -> 0) makes verification FALSE",
+      "ok": true,
+      "detail": "controls.COERCION.violations rewritten; verify=false"
+    },
+    {
+      "id": "C4j",
+      "name": "encodeReceipt -> decodeReceipt round-trips byte-identically (the QR/verify-link codec)",
+      "ok": true,
+      "detail": "encoded 1115 base64url chars (zlib level 9), decoded payload is canonically identical to the original"
+    },
+    {
+      "id": "C4k",
+      "name": "canonicalJson is key-order independent, so a JSON round-trip cannot break a signature",
+      "ok": true,
+      "detail": "reversing every key of the payload produced a byte-identical canonical form"
+    },
+    {
+      "id": "C7c",
+      "name": "upperBound95(0,1) and upperBound95(1,1) are real Wilson bounds, not 0%/100% fabrications",
+      "ok": true,
+      "detail": "ub95(0/1)=0.793451 (Wilson 0.7935) ub95(1/1)=1 ub95(0/20)=0.161125 ub95(1/20)=0.236131 ub95(2/5)=0.769276"
+    },
+    {
+      "id": "C7d",
+      "name": "upperBound95 refuses trials=0 instead of dividing by zero",
+      "ok": true,
+      "detail": "threw \"trials must be a positive integer\""
+    },
+    {
+      "id": "C7e",
+      "name": "receipt control trials scale with repeat xN and the confidence bound tightens",
+      "ok": true,
+      "detail": "COERCION N=1 -> 1/1; N=5 -> 5/5; DATA_LEAK 0/1 ub95=0.793451 (N=1) -> 0/5 ub95=0.434482 (N=5)"
+    },
+    {
+      "id": "C7f",
+      "name": "not_covered lists every judge dimension the run did not observe (27 registry - 2 observed)",
+      "ok": true,
+      "detail": "not_covered has 25/27 dimensions, COERCION excluded, SABOTAGE=true"
+    },
+    {
+      "id": "C6g-ui",
+      "name": "the verify page turns a true verification into SIGNATURE VALID and un-hides the freshness banner",
+      "ok": true,
+      "detail": "page.tsx:37 wires verifyReceiptSignature(decoded).then(setSignatureValid)=true; :73 renders \"SIGNATURE VALID\" iff truthy=true; :76 gates <FreshnessBadge> on signatureValid=true; :107 degrade copy present=true; :33 rejects a mismatched URL fingerprint=true. Running that exact pipeline on an encoded receipt: decodeReceipt ok, fingerprint match=true, verifyReceiptSignature=true => the page renders the pass pill and the banner is NOT hidden."
+    },
+    {
+      "id": "C6h-ui",
+      "name": "a tampered payload still yields false, so the pass pill and the banner are earned, not unconditional",
+      "ok": true,
+      "detail": "rewriting issued_at on the decoded payload flips verifyReceiptSignature to false => page.tsx:73 would render \"SIGNATURE INVALID\" and page.tsx:76 would suppress <FreshnessBadge>"
+    },
+    {
+      "id": "C6c",
+      "name": "freshness 'current' branch: ledger fingerprint == receipt fingerprint",
+      "ok": true,
+      "detail": "page.tsx:43-44 would render state=\"current\" (ledger 00c3fbbe2e4a… == receipt 00c3fbbe2e4a…)"
+    },
+    {
+      "id": "C6d",
+      "name": "freshness 'superseded' branch: ledger pointer moved past the verified receipt",
+      "ok": true,
+      "detail": "page.tsx:44-45 renders state=\"superseded\" because ledger (aab4668b2a77…) != the verified receipt (00c3fbbe2e4a…); the newer receipt's supersedes points back at it (00c3fbbe2e4a…)"
+    },
+    {
+      "id": "C6e",
+      "name": "freshness degrades to 'signature valid, freshness unknown' when the ledger call fails",
+      "ok": true,
+      "detail": "orphan receipt qa-orphan-never-posted is signed (key_note=demo key, not KMS); GET /api/ledger/qa-orphan-never-posted -> HTTP 404 => page.tsx:40 throws, :48 sets {state:\"unknown\"} => FreshnessBadge renders \"Signature valid, freshness unknown.\""
+    },
+    {
+      "id": "C6f",
+      "name": "the public verify URL built by app/Receipts.tsx loads 200 with no sign-in and ships the client bundle",
+      "ok": true,
+      "detail": "HTTP 200 bytes=9981 scripts=8 no-auth (no redirect, no sign-in wording); the receipt payload is read client-side from the query string"
+    },
+    {
+      "id": "C8k",
+      "name": "GitHub Checks API body: CONFIRMED controls => conclusion \"failure\"",
+      "ok": true,
+      "detail": "POST https://api.github.com/repos/acme/x/check-runs -> {status:completed, conclusion:failure, head_sha:11111111…, title:\"Warrant gate blocked: 1 confirmed control(s)\"}"
+    },
+    {
+      "id": "C8l",
+      "name": "GitHub Checks API body: all controls clean => conclusion \"success\"",
+      "ok": true,
+      "detail": "{status:completed, conclusion:success, title:\"Warrant gate passed\"}"
+    },
+    {
+      "id": "C8m",
+      "name": "PR comment marks CONFIRMED controls STALE and a clean run CURRENT",
+      "ok": true,
+      "detail": "stale-has=true current-has=true current-has-no-STALE=true"
+    },
+    {
+      "id": "C8n",
+      "name": "PR comment is idempotent via the invisible marker and stamps the head SHA",
+      "ok": true,
+      "detail": "marker=<!-- warrant-pr-gate --> present in both; head stamp present"
+    },
+    {
+      "id": "C8o",
+      "name": "verifyWebhookSignature accepts a correct HMAC and rejects a wrong/garbage one",
+      "ok": true,
+      "detail": "correct=true wrong=false garbage=false"
+    },
+    {
+      "id": "C8p",
+      "name": "diffContracts + scenariosForDiff map a new tool to the right affected edges",
+      "ok": true,
+      "detail": "newCapabilities=[\"payment.write\"] promptChanged=false edges=[\"privilege_escalation\",\"scope_creep\",\"unauthorized_action\"]"
+    },
+    {
+      "id": "C9a",
+      "name": "no LEDGER_KV_URL => .warrant/ledger.jsonl is created under the working directory",
+      "ok": true,
+      "detail": "cwd=C:\\Users\\Ayush\\AppData\\Local\\Temp\\warrant-qa-bc3394dd\\a; .warrant/ledger.jsonl exists=true (149 bytes); getLatestLedgerRow(\"child-a\") -> {\"identity\":\"child-a\",\"fingerprint\":\"sha256:4467dc7e457c2d295c4399e75ce74683913a0ae279ef82601083abec7c551922\",\"issued_at\":\"2026-09-26T09:21:07.789Z\"}; first advance returned previous=null"
+    },
+    {
+      "id": "C9b",
+      "name": "no RECEIPT_SIGNING_SEED => a fresh demo keypair is generated and logged with a clear warning",
+      "ok": true,
+      "detail": "key_note=\"demo key, not KMS\"; the boot warning appeared 1x: [warrant] RECEIPT_SIGNING_SEED is unset; generated demo Ed25519 key MCowBQYDK2VwAyEALRDrEXKtJQ96kIE6zA5zZJMlulfET1r9NZe5sRdeugo=. It will rotate on se; pub=MCowBQYDK2VwAyEALRDr… (that child's own signature validity is reported by the `signatureValid` field it printed: true)"
+    },
+    {
+      "id": "C9c",
+      "name": "the generated demo key really rotates per process (two children, two public keys)",
+      "ok": true,
+      "detail": "child A pub=MCowBQYDK2VwAyEALRDr… child A2 pub=MCowBQYDK2VwAyEAzNC8…"
+    },
+    {
+      "id": "C9d",
+      "name": "RECEIPT_SIGNING_SEED (64 hex chars) => deterministic keypair, key_note 'configured Ed25519 seed', no warning",
+      "ok": true,
+      "detail": "seed=4aec49e8…; two independent processes produced the same public key (MCowBQYDK2VwAyEA+wb1…); key_note=\"configured Ed25519 seed\"; boot warning printed=false"
+    },
+    {
+      "id": "C9e",
+      "name": "base64 seed accepted; a seed that is not 32 bytes is rejected loudly",
+      "ok": true,
+      "detail": "base64 seed -> key MCowBQYDK2VwAyEA2bqr… (differs from the hex seed key); 2-byte seed error: Error: RECEIPT_SIGNING_SEED must encode exactly 32 bytes\r"
+    },
+    {
+      "id": "C9f",
+      "name": "LEDGER_KV_URL set => the Upstash REST branch is used and the local .warrant file is NOT written",
+      "ok": true,
+      "detail": "LEDGER_KV_URL=http://127.0.0.1:60607 (fake Upstash REST); the KV server saw [\"GET warrant:ledger:child-c\",\"SET warrant:ledger:child-c\",\"GET warrant:ledger:child-c\"]; getLatestLedgerRow -> {\"identity\":\"child-c\",\"fingerprint\":\"sha256:16ca8a64d95bd68847263cdef1eee14af10450ea73d72f9324979e9b27512f58\",\"issued_at\":\"2026-09-26T09:21:10.414Z\"}; .warrant/ledger.jsonl created locally=false"
+    },
+    {
+      "id": "C9g",
+      "name": "the 'no RECEIPT_SIGNING_SEED' warning is emitted at server boot, not only in tests",
+      "ok": true,
+      "detail": "npm run build log contains the warning 4x"
+    }
+  ]
+}

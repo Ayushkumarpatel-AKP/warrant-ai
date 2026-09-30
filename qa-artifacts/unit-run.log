@@ -1,0 +1,51 @@
+# QA unit/render suite (server http://localhost:3112)
+
+PASS C1 left rail has exactly 9 nav items in the spec order, Receipts 6th (after Full report) :: found 9: [Overview | Threat model | New crash test | Voice red-team | Full report | Receipts | Scenarios | Connect agent | Settings]
+PASS C1b every nav item is a button wired to a tab id (9 distinct keys) :: rail-item buttons=9
+PASS C2a metric tile 'Receipts issued' renders with count and the non-warn sub-label :: label present=true; empty-ledger value="–"=true; sub="signed this session"=true
+PASS C2b the other four metric tiles are unregressed :: found Agents tested=true Failed safety=true Avg rating=true Traps available=true
+PASS C2c '⚠ N superseded' logic: 0 when empty, 1 for one stale twin, unchanged for a second identity :: predicate present in app/Dashboard.tsx=true; empty=0 oneStale=1 twoIdentities=1
+PASS C2d tile value is ledger.length (0 receipts renders as the en-dash placeholder) :: app/Dashboard.tsx:202-206 uses value={ledger.length || "–"}
+PASS C10-overview Overview (Dashboard default render) renders without throwing :: SSR produced 5988 bytes
+PASS C10-threats Threat model renders without throwing :: SSR produced 12708 bytes
+PASS C10-receipts Receipts (empty state) renders without throwing :: SSR produced 262 bytes
+PASS C10-scenarios Scenarios renders without throwing :: SSR produced 878 bytes
+PASS C10-connect Connect agent renders without throwing :: SSR produced 2432 bytes
+PASS C10-run New crash test (CrashRunner) renders without throwing :: SSR produced 3224 bytes
+PASS C10-report Full report (SuiteReport) renders without throwing :: SSR produced 5286 bytes
+PASS C10-voice Voice red-team (VoiceCall) renders without throwing :: SSR produced 1147 bytes
+PASS C10-live Voice red-team live (LiveCall) renders without throwing :: SSR produced 3570 bytes
+PASS C10-settings Settings renders without throwing :: SSR produced 2432 bytes
+[warrant] RECEIPT_SIGNING_SEED is unset; generated demo Ed25519 key MCowBQYDK2VwAyEAqcNObW5GEOrV6llU1CrdfoF2Onvxm85Wq99lHuMS8JE=. It will rotate on server restart.
+PASS C10-receipts2 Receipts renders a CURRENT pill and a SUPERSEDED pill for the stale twin :: CURRENT=true SUPERSEDED-by=true bytes=3378
+FAIL C4g client-side Ed25519 verifyReceiptSignature() returns TRUE for a real signed receipt :: returned false; key_note=demo key, not KMS; public_key=MCowBQYDK2VwAyEA… is 44 bytes (SPKI DER, from lib/receipt.ts:70/84) but lib/receiptShared.ts:74-77 imports it with format "raw", which WebCrypto requires to be exactly 32 bytes => DataError swallowed by the catch at receiptShared.ts:87
+PASS C4g-diag DIAGNOSIS: the signature is valid; only the key FORMAT is wrong (raw 32-byte verifies, SPKI DER is rejected) :: importKey("raw", spkiDer[44B]) => threw DataError: Ed25519 raw keys must be exactly 32-bytes; importKey("raw", spkiDer.subarray(-32)) => verify=true. So the Ed25519 signature in lib/receipt.ts:86 is correct and the client-side failure is purely the key encoding.
+PASS C4h tampering with a signed field makes verification return FALSE :: verify(tampered)=false
+PASS C4i tampering with the control tally (violations 1 -> 0) makes verification FALSE :: controls.COERCION.violations rewritten; verify=false
+PASS C4j encodeReceipt -> decodeReceipt round-trips byte-identically (the QR/verify-link codec) :: encoded 1116 base64url chars (zlib level 9), decoded payload is canonically identical to the original
+PASS C4k canonicalJson is key-order independent, so a JSON round-trip cannot break a signature :: reversing every key of the payload produced a byte-identical canonical form
+PASS C7c upperBound95(0,1) and upperBound95(1,1) are real Wilson bounds, not 0%/100% fabrications :: ub95(0/1)=0.793451 (Wilson 0.7935) ub95(1/1)=1 ub95(0/20)=0.161125 ub95(1/20)=0.236131 ub95(2/5)=0.769276
+PASS C7d upperBound95 refuses trials=0 instead of dividing by zero :: threw "trials must be a positive integer"
+PASS C7e receipt control trials scale with repeat xN and the confidence bound tightens :: COERCION N=1 -> 1/1; N=5 -> 5/5; DATA_LEAK 0/1 ub95=0.793451 (N=1) -> 0/5 ub95=0.434482 (N=5)
+PASS C7f not_covered lists every judge dimension the run did not observe (27 registry - 2 observed) :: not_covered has 25/27 dimensions, COERCION excluded, SABOTAGE=true
+PASS C6c freshness 'current' branch: ledger fingerprint == receipt fingerprint :: page.tsx:43-44 would render state="current" (ledger 00c3fbbe2e4a… == receipt 00c3fbbe2e4a…)
+PASS C6d freshness 'superseded' branch: ledger pointer moved past the verified receipt :: page.tsx:44-45 renders state="superseded" because ledger (aab4668b2a77…) != the verified receipt (00c3fbbe2e4a…); the newer receipt's supersedes points back at it (00c3fbbe2e4a…)
+PASS C6e freshness degrades to 'signature valid, freshness unknown' when the ledger call fails :: orphan receipt qa-orphan-never-posted is signed (key_note=demo key, not KMS); GET /api/ledger/qa-orphan-never-posted -> HTTP 404 => page.tsx:40 throws, :48 sets {state:"unknown"} => FreshnessBadge renders "Signature valid, freshness unknown."
+PASS C6f the public verify URL built by app/Receipts.tsx loads 200 with no sign-in and ships the client bundle :: HTTP 200 bytes=9981 scripts=8 no-auth (no redirect, no sign-in wording); the receipt payload is read client-side from the query string
+PASS C8k GitHub Checks API body: CONFIRMED controls => conclusion "failure" :: POST https://api.github.com/repos/acme/x/check-runs -> {status:completed, conclusion:failure, head_sha:11111111…, title:"Warrant gate blocked: 1 confirmed control(s)"}
+PASS C8l GitHub Checks API body: all controls clean => conclusion "success" :: {status:completed, conclusion:success, title:"Warrant gate passed"}
+PASS C8m PR comment marks CONFIRMED controls STALE and a clean run CURRENT :: stale-has=true current-has=true current-has-no-STALE=true
+PASS C8n PR comment is idempotent via the invisible marker and stamps the head SHA :: marker=<!-- warrant-pr-gate --> present in both; head stamp present
+PASS C8o verifyWebhookSignature accepts a correct HMAC and rejects a wrong/garbage one :: correct=true wrong=false garbage=false
+PASS C8p diffContracts + scenariosForDiff map a new tool to the right affected edges :: newCapabilities=["payment.write"] promptChanged=false edges=["privilege_escalation","scope_creep","unauthorized_action"]
+PASS C9a no LEDGER_KV_URL => .warrant/ledger.jsonl is created under the working directory :: cwd=C:\Users\Ayush\AppData\Local\Temp\warrant-qa-26f6a994\a; .warrant/ledger.jsonl exists=true (149 bytes); getLatestLedgerRow("child-a") -> {"identity":"child-a","fingerprint":"sha256:4467dc7e457c2d295c4399e75ce74683913a0ae279ef82601083abec7c551922","issued_at":"2026-09-26T08:31:03.864Z"}; first advance returned previous=null
+PASS C9b no RECEIPT_SIGNING_SEED => a fresh demo keypair is generated and logged with a clear warning :: key_note="demo key, not KMS"; the boot warning appeared 1x: [warrant] RECEIPT_SIGNING_SEED is unset; generated demo Ed25519 key MCowBQYDK2VwAyEABi2QUCe7OR1ien+4D61NqJ3j/Y9SckuY20cJS/K8i4A=. It will rotate on se; pub=MCowBQYDK2VwAyEABi2Q… (signature validity of this key is reported by C4g, which FAILS on an unrelated key-encoding bug)
+PASS C9c the generated demo key really rotates per process (two children, two public keys) :: child A pub=MCowBQYDK2VwAyEABi2Q… child A2 pub=MCowBQYDK2VwAyEAk2M4…
+PASS C9d RECEIPT_SIGNING_SEED (64 hex chars) => deterministic keypair, key_note 'configured Ed25519 seed', no warning :: seed=ace3820e…; two independent processes produced the same public key (MCowBQYDK2VwAyEAIFjJ…); key_note="configured Ed25519 seed"; boot warning printed=false
+PASS C9e base64 seed accepted; a seed that is not 32 bytes is rejected loudly :: base64 seed -> key MCowBQYDK2VwAyEA06f7… (differs from the hex seed key); 2-byte seed error: Error: RECEIPT_SIGNING_SEED must encode exactly 32 bytes
+PASS C9f LEDGER_KV_URL set => the Upstash REST branch is used and the local .warrant file is NOT written :: LEDGER_KV_URL=http://127.0.0.1:60922 (fake Upstash REST); the KV server saw ["GET warrant:ledger:child-c","SET warrant:ledger:child-c","GET warrant:ledger:child-c"]; getLatestLedgerRow -> {"identity":"child-c","fingerprint":"sha256:16ca8a64d95bd68847263cdef1eee14af10450ea73d72f9324979e9b27512f58","issued_at":"2026-09-26T08:31:06.524Z"}; .warrant/ledger.jsonl created locally=false
+PASS C9g the 'no RECEIPT_SIGNING_SEED' warning is emitted at server boot, not only in tests :: npm run build log contains the warning 2x
+
+# 43/44 unit checks passed
+# FAILED:
+#  - C4g client-side Ed25519 verifyReceiptSignature() returns TRUE for a real signed receipt :: returned false; key_note=demo key, not KMS; public_key=MCowBQYDK2VwAyEA… is 44 bytes (SPKI DER, from lib/receipt.ts:70/84) but lib/receiptShared.ts:74-77 imports it with format "raw", which WebCrypto requires to be exactly 32 bytes => DataError swallowed by the catch at receiptShared.ts:87

@@ -1,3 +1,5 @@
+import { WarrantMark } from "../Logo";
+
 export const metadata = {
   title: "Terms — Warrant",
   description: "What a Warrant safety rating does and does not mean.",
@@ -5,9 +7,10 @@ export const metadata = {
 
 export default function TermsPage() {
   return (
-    <main className="legal">
+    <main className="doc-frame">
+      <div className="legal doc-sheet">
       <header className="legal-top">
-        <span className="logo-mark">W</span>
+        <span className="logo-mark"><WarrantMark /></span>
         <span className="brand-lg">Warrant</span>
         <a className="legal-back" href="/">
           Back to the app
@@ -97,6 +100,7 @@ export default function TermsPage() {
         <a href="/privacy">Privacy</a>
         <a href="/">Back to the app</a>
       </nav>
+      </div>
     </main>
   );
 }

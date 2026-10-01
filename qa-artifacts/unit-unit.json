@@ -1,5 +1,5 @@
 {
-  "base": "http://localhost:3121",
+  "base": "http://localhost:3000",
   "results": [
     {
       "id": "C1",
@@ -10,8 +10,8 @@
     {
       "id": "C1b",
       "name": "every nav item is a button wired to a tab id (9 distinct keys)",
-      "ok": true,
-      "detail": "rail-item buttons=9"
+      "ok": false,
+      "detail": "rail-item buttons=18"
     },
     {
       "id": "C2a",
@@ -41,13 +41,13 @@
       "id": "C10-overview",
       "name": "Overview (Dashboard default render) renders without throwing",
       "ok": true,
-      "detail": "SSR produced 5988 bytes"
+      "detail": "SSR produced 13212 bytes"
     },
     {
       "id": "C10-threats",
       "name": "Threat model renders without throwing",
       "ok": true,
-      "detail": "SSR produced 12708 bytes"
+      "detail": "SSR produced 12755 bytes"
     },
     {
       "id": "C10-receipts",
@@ -131,7 +131,7 @@
       "id": "C4j",
       "name": "encodeReceipt -> decodeReceipt round-trips byte-identically (the QR/verify-link codec)",
       "ok": true,
-      "detail": "encoded 1115 base64url chars (zlib level 9), decoded payload is canonically identical to the original"
+      "detail": "encoded 1111 base64url chars (zlib level 9), decoded payload is canonically identical to the original"
     },
     {
       "id": "C4k",
@@ -179,13 +179,13 @@
       "id": "C6c",
       "name": "freshness 'current' branch: ledger fingerprint == receipt fingerprint",
       "ok": true,
-      "detail": "page.tsx:43-44 would render state=\"current\" (ledger 00c3fbbe2e4a… == receipt 00c3fbbe2e4a…)"
+      "detail": "page.tsx:43-44 would render state=\"current\" (ledger 580ecca59e6e… == receipt 580ecca59e6e…)"
     },
     {
       "id": "C6d",
       "name": "freshness 'superseded' branch: ledger pointer moved past the verified receipt",
       "ok": true,
-      "detail": "page.tsx:44-45 renders state=\"superseded\" because ledger (aab4668b2a77…) != the verified receipt (00c3fbbe2e4a…); the newer receipt's supersedes points back at it (00c3fbbe2e4a…)"
+      "detail": "page.tsx:44-45 renders state=\"superseded\" because ledger (b3a77a0867ef…) != the verified receipt (580ecca59e6e…); the newer receipt's supersedes points back at it (580ecca59e6e…)"
     },
     {
       "id": "C6e",
@@ -197,7 +197,7 @@
       "id": "C6f",
       "name": "the public verify URL built by app/Receipts.tsx loads 200 with no sign-in and ships the client bundle",
       "ok": true,
-      "detail": "HTTP 200 bytes=9981 scripts=8 no-auth (no redirect, no sign-in wording); the receipt payload is read client-side from the query string"
+      "detail": "HTTP 200 bytes=12287 scripts=8 no-auth (no redirect, no sign-in wording); the receipt payload is read client-side from the query string"
     },
     {
       "id": "C8k",
@@ -239,37 +239,37 @@
       "id": "C9a",
       "name": "no LEDGER_KV_URL => .warrant/ledger.jsonl is created under the working directory",
       "ok": true,
-      "detail": "cwd=C:\\Users\\Ayush\\AppData\\Local\\Temp\\warrant-qa-bc3394dd\\a; .warrant/ledger.jsonl exists=true (149 bytes); getLatestLedgerRow(\"child-a\") -> {\"identity\":\"child-a\",\"fingerprint\":\"sha256:4467dc7e457c2d295c4399e75ce74683913a0ae279ef82601083abec7c551922\",\"issued_at\":\"2026-09-26T09:21:07.789Z\"}; first advance returned previous=null"
+      "detail": "cwd=C:\\Users\\Ayush\\AppData\\Local\\Temp\\warrant-qa-e4f07413\\a; .warrant/ledger.jsonl exists=true (149 bytes); getLatestLedgerRow(\"child-a\") -> {\"identity\":\"child-a\",\"fingerprint\":\"sha256:da2d43c808ff6a966c22039457ba2eabe2018af645a36b4cc86f4ba62cca1389\",\"issued_at\":\"2026-10-01T10:37:47.314Z\"}; first advance returned previous=null"
     },
     {
       "id": "C9b",
       "name": "no RECEIPT_SIGNING_SEED => a fresh demo keypair is generated and logged with a clear warning",
       "ok": true,
-      "detail": "key_note=\"demo key, not KMS\"; the boot warning appeared 1x: [warrant] RECEIPT_SIGNING_SEED is unset; generated demo Ed25519 key MCowBQYDK2VwAyEALRDrEXKtJQ96kIE6zA5zZJMlulfET1r9NZe5sRdeugo=. It will rotate on se; pub=MCowBQYDK2VwAyEALRDr… (that child's own signature validity is reported by the `signatureValid` field it printed: true)"
+      "detail": "key_note=\"demo key, not KMS\"; the boot warning appeared 1x: [warrant] RECEIPT_SIGNING_SEED is unset; generated demo Ed25519 key MCowBQYDK2VwAyEAJUeaMm78jnSENHRlOsw5jwQMjyeQY0BxzGQiR0Jhbe4=. It will rotate on se; pub=MCowBQYDK2VwAyEAJUea… (that child's own signature validity is reported by the `signatureValid` field it printed: true)"
     },
     {
       "id": "C9c",
       "name": "the generated demo key really rotates per process (two children, two public keys)",
       "ok": true,
-      "detail": "child A pub=MCowBQYDK2VwAyEALRDr… child A2 pub=MCowBQYDK2VwAyEAzNC8…"
+      "detail": "child A pub=MCowBQYDK2VwAyEAJUea… child A2 pub=MCowBQYDK2VwAyEAN9NL…"
     },
     {
       "id": "C9d",
       "name": "RECEIPT_SIGNING_SEED (64 hex chars) => deterministic keypair, key_note 'configured Ed25519 seed', no warning",
       "ok": true,
-      "detail": "seed=4aec49e8…; two independent processes produced the same public key (MCowBQYDK2VwAyEA+wb1…); key_note=\"configured Ed25519 seed\"; boot warning printed=false"
+      "detail": "seed=e3a2aa7e…; two independent processes produced the same public key (MCowBQYDK2VwAyEAvetW…); key_note=\"configured Ed25519 seed\"; boot warning printed=false"
     },
     {
       "id": "C9e",
       "name": "base64 seed accepted; a seed that is not 32 bytes is rejected loudly",
       "ok": true,
-      "detail": "base64 seed -> key MCowBQYDK2VwAyEA2bqr… (differs from the hex seed key); 2-byte seed error: Error: RECEIPT_SIGNING_SEED must encode exactly 32 bytes\r"
+      "detail": "base64 seed -> key MCowBQYDK2VwAyEAomtL… (differs from the hex seed key); 2-byte seed error: Error: RECEIPT_SIGNING_SEED must encode exactly 32 bytes\r"
     },
     {
       "id": "C9f",
       "name": "LEDGER_KV_URL set => the Upstash REST branch is used and the local .warrant file is NOT written",
       "ok": true,
-      "detail": "LEDGER_KV_URL=http://127.0.0.1:60607 (fake Upstash REST); the KV server saw [\"GET warrant:ledger:child-c\",\"SET warrant:ledger:child-c\",\"GET warrant:ledger:child-c\"]; getLatestLedgerRow -> {\"identity\":\"child-c\",\"fingerprint\":\"sha256:16ca8a64d95bd68847263cdef1eee14af10450ea73d72f9324979e9b27512f58\",\"issued_at\":\"2026-09-26T09:21:10.414Z\"}; .warrant/ledger.jsonl created locally=false"
+      "detail": "LEDGER_KV_URL=http://127.0.0.1:54045 (fake Upstash REST); the KV server saw [\"GET warrant:ledger:child-c\",\"SET warrant:ledger:child-c\",\"GET warrant:ledger:child-c\"]; getLatestLedgerRow -> {\"identity\":\"child-c\",\"fingerprint\":\"sha256:93d3684913c03a1be1a1b4b150b0e80246cc09e73132d6bf256701e0af373e31\",\"issued_at\":\"2026-10-01T10:37:49.506Z\"}; .warrant/ledger.jsonl created locally=false"
     },
     {
       "id": "C9g",

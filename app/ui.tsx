@@ -32,6 +32,8 @@ export const IcoSpark = mk(<path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M1
 export const IcoSun = mk(<><circle cx="12" cy="12" r="4" /><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" /></>);
 export const IcoMoon = mk(<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z" />);
 export const IcoCheck = mk(<path d="M20 6 9 17l-5-5" />);
+export const IcoMail = mk(<><rect x="3" y="5" width="18" height="14" rx="2.4" /><path d="m3.9 7.2 6.8 4.9a2.2 2.2 0 0 0 2.6 0l6.8-4.9" /></>);
+export const IcoCopy = mk(<><rect x="9" y="9" width="11.4" height="11.4" rx="2.2" /><path d="M15 5.6A2.6 2.6 0 0 0 12.4 3H5.6A2.6 2.6 0 0 0 3 5.6v6.8A2.6 2.6 0 0 0 5.6 15" /></>);
 export const IcoAlert = mk(<><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z" /><path d="M12 9v4M12 17h.01" /></>);
 export const IcoGoogle = (props: React.SVGProps<SVGSVGElement>) => (
   <svg width="18" height="18" viewBox="0 0 48 48" {...props}>

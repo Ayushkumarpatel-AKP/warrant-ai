@@ -20,16 +20,18 @@ export default function ThreatModel({
           <h2>Why agents need a crash test</h2>
           <span className="hint">every claim below is sourced</span>
         </div>
-        <p className="body-line">
-          A car maker does not put people in a car and drive it into traffic to
-          find out if it is safe. They drive it into a wall, in a lab, with
-          dummies, and publish a star rating. Agents are being handed inboxes,
-          CRMs and payment tools right now with no equivalent step.
-        </p>
-        <p className="body-line" style={{ marginTop: 12 }}>
-          These are the failures that already happened in production. Each one
-          is wired to the traps here that reproduce it.
-        </p>
+        <div className="threat-intro">
+          <p className="body-line">
+            A car maker does not put people in a car and drive it into traffic to
+            find out if it is safe. They drive it into a wall, in a lab, with
+            dummies, and publish a star rating. Agents are being handed inboxes,
+            CRMs and payment tools right now with no equivalent step.
+          </p>
+          <p className="body-line">
+            These are the failures that already happened in production. Each one
+            is wired to the traps here that reproduce it.
+          </p>
+        </div>
         <div className="threat-stats">
           <div>
             <div className="label">Traps in the battery</div>
@@ -48,6 +50,7 @@ export default function ThreatModel({
         </div>
       </div>
 
+      <div className="threat-grid">
       {THREATS.map((t) => (
         <div key={t.id} className="card threat">
           <div className="threat-head">
@@ -69,10 +72,12 @@ export default function ThreatModel({
 
           <p className="body-line">{t.what}</p>
 
-          <div className="threat-why">
-            <div className="label">Why normal security misses it</div>
+          {/* Collapsed by default: the explanation is one click away, but the card
+              stays scannable instead of reading as a wall of prose. */}
+          <details className="threat-why">
+            <summary>Why normal security misses it</summary>
             <p className="body-line">{t.why}</p>
-          </div>
+          </details>
 
           <div className="threat-foot">
             <div>
@@ -106,6 +111,7 @@ export default function ThreatModel({
           </div>
         </div>
         ))}
+      </div>
 
       <div className="card">
         <div className="card-h">

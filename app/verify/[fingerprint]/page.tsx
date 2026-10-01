@@ -7,6 +7,7 @@ import {
   verifyReceiptSignature,
   type SignedReceipt,
 } from "@/lib/receiptShared";
+import { WarrantMark } from "../../Logo";
 
 type Freshness =
   | { state: "checking" }
@@ -52,9 +53,10 @@ export default function VerifyReceiptPage() {
   }, [params.fingerprint, search]);
 
   return (
-    <main style={{ maxWidth: 860, margin: "0 auto", padding: "48px 24px" }}>
+    <main className="doc-frame">
+      <div className="doc-sheet">
       <div className="rail-brand" style={{ padding: 0, marginBottom: 28 }}>
-        <span className="logo-mark">W</span> Warrant receipt verifier
+        <span className="logo-mark"><WarrantMark /></span> Warrant receipt verifier
       </div>
       {error ? (
         <div className="banner fail">{error}</div>
@@ -97,6 +99,7 @@ export default function VerifyReceiptPage() {
           <p className="mono">{receipt.issued_at}</p>
         </div>
       )}
+      </div>
     </main>
   );
 }

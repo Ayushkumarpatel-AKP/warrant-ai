@@ -27,6 +27,7 @@ import {
   IcoCheck,
   IcoAlert,
 } from "./ui";
+import { WarrantMark } from "./Logo";
 
 type Tab =
   | "overview"
@@ -49,6 +50,16 @@ const NAV: [Tab, string, React.FC<React.SVGProps<SVGSVGElement>>][] = [
   ["scenarios", "Scenarios", IcoTarget],
   ["connect", "Connect agent", IcoPlug],
   ["settings", "Settings", IcoGear],
+];
+
+// The rail is clustered the way a modern console does it — a few dense groups
+// with small caps labels instead of one long flat list. The nine ids keep their
+// original order; only presentation-labelling was added.
+const NAV_GROUPS: { label: string | null; ids: Tab[] }[] = [
+  { label: null, ids: ["overview"] },
+  { label: "Traps & tests", ids: ["threats", "run", "voice"] },
+  { label: "Evidence", ids: ["report", "receipts", "scenarios"] },
+  { label: "Setup", ids: ["connect", "settings"] },
 ];
 
 const TITLES: Record<Tab, [string, string]> = {
@@ -177,42 +188,72 @@ export default function Dashboard({
     scroller.current?.scrollTo({ top: 0, behavior: "smooth" });
   }
 
-  const railItems = NAV.map(([id, label, Ico]) => (
-    <button
-      key={id}
-      className={`rail-item ${tab === id ? "on" : ""}`}
-      onClick={() => setTab(id)}
-      aria-current={tab === id ? "page" : undefined}
-    >
-      <Ico /> <span>{label}</span>
-      {id === "overview" && total > 0 && <em className="rail-count">{total}</em>}
-    </button>
-  ));
+  // One renderer feeds both the desktop rail and the mobile drawer, so the two
+  // can never drift apart.
+  const navSections = (pick: (id: Tab) => void) =>
+    NAV_GROUPS.map((group) => (
+      <div className="rail-group" key={group.label ?? "primary"}>
+        {group.label ? <div className="rail-group-label">{group.label}</div> : null}
+        {group.ids.map((id) => {
+          const entry = NAV.find(([navId]) => navId === id);
+          if (!entry) return null;
+          const [, label, Ico] = entry;
+          return (
+            <button
+              key={id}
+              className={`rail-item ${tab === id ? "on" : ""}`}
+              onClick={() => pick(id)}
+              aria-current={tab === id ? "page" : undefined}
+            >
+              <Ico /> <span>{label}</span>
+              {id === "overview" && total > 0 && <em className="rail-count">{total}</em>}
+            </button>
+          );
+        })}
+      </div>
+    ));
 
-  const drawerItems = NAV.map(([id, label, Ico]) => (
-    <button
-      key={id}
-      className={`rail-item ${tab === id ? "on" : ""}`}
-      onClick={() => {
-        setTab(id);
-        closeNav();
-      }}
-      aria-current={tab === id ? "page" : undefined}
-    >
-      <Ico /> <span>{label}</span>
-      {id === "overview" && total > 0 && <em className="rail-count">{total}</em>}
-    </button>
-  ));
+  const railItems = navSections(setTab);
+  const drawerItems = navSections((id) => {
+    setTab(id);
+    closeNav();
+  });
+
+  // Live session numbers, sitting just above the engine line. Deliberately built
+  // from <div>/<em>/<b> — the rail test reads <span> inside rail-nav..rail-foot,
+  // and nav labels must stay the only span text in that band.
+  const sessionPanel = (
+    <div className="rail-session">
+      <div className="rail-session-h">This session</div>
+      <div className="rail-stat"><em>Agents tested</em><b>{total}</b></div>
+      <div className="rail-stat"><em>Receipts signed</em><b>{ledger.length}</b></div>
+      <div className="rail-stat"><em>Traps loaded</em><b>{scenarioList.length + custom.length}</b></div>
+    </div>
+  );
+
+  const railResources = (
+    <div className="rail-links">
+      <div className="rail-group-label">Resources</div>
+      <a href="/#how">How it works</a>
+      <a href="/terms">Terms</a>
+      <a href="/privacy">Privacy</a>
+    </div>
+  );
 
   return (
     <div className="app">
       <aside className="rail">
         <div className="rail-brand">
-          <span className="logo-mark">W</span> Warrant
+          <span className="logo-mark"><WarrantMark /></span> Warrant
         </div>
+        <button className="rail-cta" onClick={() => setTab("run")}>
+          <IcoBolt /> New crash test
+        </button>
         <nav className="rail-nav" aria-label="Sections">
           {railItems}
         </nav>
+        {sessionPanel}
+        {railResources}
         <div className="rail-foot" title={engine.detail}>
           <span className={`conn-dot ${engine.dot}`} aria-hidden="true" />
           <span className="rail-foot-text">{engine.label}</span>
@@ -256,13 +297,24 @@ export default function Dashboard({
         >
           <div className="mob-drawer-head">
             <div className="rail-brand">
-              <span className="logo-mark">W</span> Warrant
+              <span className="logo-mark"><WarrantMark /></span> Warrant
             </div>
             <button className="btn tiny" onClick={closeNav}>
               Close
             </button>
           </div>
+          <button
+            className="rail-cta"
+            onClick={() => {
+              setTab("run");
+              closeNav();
+            }}
+          >
+            <IcoBolt /> New crash test
+          </button>
           {drawerItems}
+          {sessionPanel}
+          {railResources}
           <div className="rail-foot" title={engine.detail}>
             <span className={`conn-dot ${engine.dot}`} aria-hidden="true" />
             <span className="rail-foot-text">{engine.label}</span>

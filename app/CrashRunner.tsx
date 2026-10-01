@@ -10,7 +10,8 @@ import type {
 } from "@/lib/events";
 import type { LeakHit } from "@/lib/secrets";
 import type { ReceiptRequest } from "./Receipts";
-import { IcoAlert } from "./ui";
+import { IcoAlert, IcoBot, IcoTarget } from "./ui";
+import { ToolCall } from "./ToolChat";
 
 export type { Verdict } from "@/lib/events";
 
@@ -114,6 +115,13 @@ export default function CrashRunner({
 
   const abortRef = useRef<AbortController | null>(null);
   const startedAt = useRef(0);
+  // The transcript keeps the newest message in view instead of growing the page.
+  const chatRef = useRef<HTMLDivElement | null>(null);
+  const transcriptLength = events.length + redTeam.length;
+  useEffect(() => {
+    const el = chatRef.current;
+    if (el) el.scrollTop = el.scrollHeight;
+  }, [transcriptLength]);
 
   const options = useMemo(
     () => [
@@ -494,33 +502,45 @@ export default function CrashRunner({
           <div className="section-title">
             <span className="dot" /> Live attack transcript
           </div>
+          <div className="chat-panel" ref={chatRef}>
           {redTeam.map((e, i) => {
             if (e.type === "attacker")
               return (
-                <div key={i} className="event attacker">
-                  <div className="ev-head">
-                    Attacker · turn {e.turn + 1}
-                    <span className="tactic">{e.tactic}</span>
+                <div key={i} className="chat-row">
+                  <span className="chat-av alarm"><IcoTarget /></span>
+                  <div className="chat-stack">
+                    <div className="chat-meta">
+                      Attacker
+                      <span className="tactic">{e.tactic}</span>
+                      <span className="chat-dim">turn {e.turn + 1}</span>
+                    </div>
+                    <div className="chat-bubble">
+                      <p className="chat-text">{e.text}</p>
+                    </div>
                   </div>
-                  <div className="ev-text">{e.text}</div>
                 </div>
               );
 
             if (e.type === "action")
               return (
-                <div key={i} className="event action indent">
-                  <div className="action-head">→ {e.tool}</div>
-                  <pre className="action-body">
-                    {JSON.stringify(e.input, null, 2)}
-                  </pre>
-                </div>
+                <ToolCall
+                  key={i}
+                  tool={e.tool}
+                  input={e.input}
+                  turn={e.turn}
+                />
               );
 
             if (e.type === "reply")
               return (
-                <div key={i} className="event reply indent">
-                  <div className="ev-head">Bot under test</div>
-                  <div className="ev-text">{e.text}</div>
+                <div key={i} className="chat-row mine">
+                  <span className="chat-av"><IcoBot /></span>
+                  <div className="chat-stack">
+                    <div className="chat-meta">Bot under test</div>
+                    <div className="chat-bubble">
+                      <p className="chat-text">{e.text}</p>
+                    </div>
+                  </div>
                 </div>
               );
 
@@ -539,6 +559,7 @@ export default function CrashRunner({
             }
             return null;
           })}
+          </div>
         </>
       )}
 
@@ -548,30 +569,35 @@ export default function CrashRunner({
           <div className="section-title">
             <span className="dot" /> Live transcript
           </div>
+          <div className="chat-panel" ref={chatRef}>
           {events.map((e, i) => {
             if (e.type === "thought")
               return (
-                <div key={i} className="event thought">
-                  {e.text}
+                <div key={i} className="chat-row note">
+                  <span className="chat-av"><IcoBot /></span>
+                  <div className="chat-stack">
+                    <div className="chat-meta">Thinking</div>
+                    <div className="chat-bubble">
+                      <p className="chat-text muted">{e.text}</p>
+                    </div>
+                  </div>
                 </div>
               );
             if (e.type === "action") {
-              const suspicious =
+              const outbound =
                 e.tool === "send_email" || e.tool === "forward_email";
               return (
-                <div
+                <ToolCall
                   key={i}
-                  className={`event action${suspicious ? " suspicious" : ""}`}
-                >
-                  <div className="action-head">→ {e.tool}</div>
-                  <pre className="action-body">
-                    {JSON.stringify(e.input, null, 2)}
-                  </pre>
-                </div>
+                  tool={e.tool}
+                  input={e.input}
+                  alarm={outbound}
+                />
               );
             }
             return null;
           })}
+          </div>
         </>
       )}
 

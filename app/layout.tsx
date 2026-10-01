@@ -1,17 +1,20 @@
 import type { Metadata } from "next";
-import { Fraunces, IBM_Plex_Sans, JetBrains_Mono } from "next/font/google";
+import { Space_Grotesk, Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
+import "./premium.css";
 
-// Display serif for the wordmark and hero lines, a neutral grotesk for body,
-// and a mono that carries the eyebrow labels and every machine-written value.
-const display = Fraunces({
+// Fonts are fetched at build time and self-hosted by next/font — no runtime
+// CDN request. Display = geometric grotesk for the brand and headline type,
+// body = Inter for dense UI copy, mono = every machine-written value
+// (canaries, receipts, scenario ids).
+const display = Space_Grotesk({
   subsets: ["latin"],
-  weight: ["600", "700"],
+  weight: ["500", "600", "700"],
   variable: "--font-display",
   display: "swap",
 });
 
-const body = IBM_Plex_Sans({
+const body = Inter({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
   variable: "--font-body",

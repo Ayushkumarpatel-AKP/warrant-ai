@@ -1,3 +1,5 @@
+import { WarrantMark } from "../Logo";
+
 export const metadata = {
   title: "Privacy — Warrant",
   description: "What Warrant stores, what it sends to a model provider, and what it never touches.",
@@ -5,9 +7,10 @@ export const metadata = {
 
 export default function PrivacyPage() {
   return (
-    <main className="legal">
+    <main className="doc-frame">
+      <div className="legal doc-sheet">
       <header className="legal-top">
-        <span className="logo-mark">W</span>
+        <span className="logo-mark"><WarrantMark /></span>
         <span className="brand-lg">Warrant</span>
         <a className="legal-back" href="/">
           Back to the app
@@ -88,6 +91,7 @@ export default function PrivacyPage() {
         whatever channel you already have with them. If you received this build from
         someone else, ask them.
       </p>
+      </div>
     </main>
   );
 }

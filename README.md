@@ -1,5 +1,7 @@
 # 🧪 Warrant
 
+> 📄 Project document: [Download Warrant Project.docx](./Warrant%20Project.docx)
+
 **The pre-deployment crash test for AI agents — the testing layer that runs itself.**
 
 Thousands of companies are handing AI agents access to their email, files, and
